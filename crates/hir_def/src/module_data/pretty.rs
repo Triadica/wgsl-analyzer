@@ -35,12 +35,7 @@ fn write_pretty_module_item(
             let function = &module.data[id.index];
 
             let _ = write!(f, "fn {}(", function.name.0);
-            for param in function
-                .params
-                .clone()
-                .into_iter()
-                .map(|idx| &module.data[idx])
-            {
+            for param in function.params.clone().map(|idx| &module.data[idx]) {
                 let ty = db.lookup_intern_type_ref(param.ty);
                 let _ = write!(f, "{}, ", &ty);
             }

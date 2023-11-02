@@ -187,7 +187,7 @@ fn parse_line(line: &str) -> (&str, Overload) {
     let parameters: Vec<_> = parameters
         .split(',')
         .filter(|param| !param.is_empty())
-        .map(|ty| match ty.find(":") {
+        .map(|ty| match ty.find(':') {
             Some(idx) if !ty[idx..].starts_with("::") => {
                 let (name, ty) = ty.split_at(idx);
                 let ty = &ty[1..];
@@ -358,13 +358,13 @@ fn type_to_rust(ty: &Type) -> String {
         Type::Vec(size, inner) => format!(
             "TyKind::Vector(VectorType {{ size: VecSize::{:?}, inner: {} }}).intern(db)",
             size,
-            type_to_rust(&*inner)
+            type_to_rust(inner)
         ),
 
         Type::Matrix(columns, rows, inner) => format!(
             "TyKind::Matrix(MatrixType {{ columns: VecSize::{:?}, rows: VecSize::{:?}, inner: {} }}).intern(db)",
             columns, rows,
-            type_to_rust(&*inner)
+            type_to_rust(inner)
         ),
 
         ty @ (Type::Bool | Type::F32 | Type::I32 | Type::U32) => {

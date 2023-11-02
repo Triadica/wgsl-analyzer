@@ -83,12 +83,10 @@ impl ShaderProcessor {
                 // Presumably this would be through a side channel
                 if scopes.len() == 1 {
                     // return Err(ProcessShaderError::TooManyEndIfs);
-                } else {
-                    if let Some((used, start_offset, def)) = scopes.pop() {
-                        if !used {
-                            let range = start_offset..offset + line.len();
-                            emit_unconfigured(range, def);
-                        }
+                } else if let Some((used, start_offset, def)) = scopes.pop() {
+                    if !used {
+                        let range = start_offset..offset + line.len();
+                        emit_unconfigured(range, def);
                     }
                 }
                 false
@@ -161,9 +159,9 @@ IGNORE
             &[],
             r#"
 .
-            
-      
-      
+
+
+
 .
 "#,
         );
@@ -298,7 +296,7 @@ var<storage> cluster_offsets_and_counts: ClusterOffsetsAndCounts;
 "#,
             &[],
             r#"
-                                                  
+
 
 struct View {
     view_proj: mat4x4<f32>;
@@ -357,20 +355,20 @@ struct Lights {
     n_directional_lights: u32;
 };
 
-                                 
-                    
-                                  
-  
-                               
-                                                                
-                                  
-  
-                                
-                                                                                       
-                                                                   
-                                  
-  
-     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 struct PointLights {
     data: array<PointLight>;
 };
@@ -380,46 +378,46 @@ struct ClusterLightIndexLists {
 struct ClusterOffsetsAndCounts {
     data: array<vec2<u32>>;
 };
-      
+
 
 [[group(0), binding(0)]]
 var<uniform> view: View;
 [[group(0), binding(1)]]
 var<uniform> lights: Lights;
-                                
-                        
-                                              
-     
+
+
+
+
 [[group(0), binding(2)]]
 var point_shadow_textures: texture_depth_cube_array;
-      
+
 [[group(0), binding(3)]]
 var point_shadow_textures_sampler: sampler_comparison;
-                                
-                        
-                                                  
-     
+
+
+
+
 [[group(0), binding(4)]]
 var directional_shadow_textures: texture_depth_2d_array;
-      
+
 [[group(0), binding(5)]]
 var directional_shadow_textures_sampler: sampler_comparison;
 
-                                 
-                        
-                                       
-                        
-                                                               
-                        
-                                                                 
-     
+
+
+
+
+
+
+
+
 [[group(0), binding(6)]]
 var<storage> point_lights: PointLights;
 [[group(0), binding(7)]]
 var<storage> cluster_light_index_lists: ClusterLightIndexLists;
 [[group(0), binding(8)]]
 var<storage> cluster_offsets_and_counts: ClusterOffsetsAndCounts;
-      
+
 "#,
         )
     }
